@@ -1,6 +1,9 @@
 # 网络服务异常检测系统
+```angular2html
 基于Django Restframework和Spark的异常检测系统，数据库为MySQL、Redis,
-消息队列为Celery，分析服务为Spark SQL,Spark Mllib
+消息队列为Celery，分析服务为Spark SQL和Spark Mllib
+```
+
 
 # Fork项目
 把项目fork到用户目录。
