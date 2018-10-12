@@ -1,7 +1,7 @@
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.authtoken.models import Token
 from nt_core.exceptions import RsError
-from nt_core.ultis import get_current_timestamp
+from nt_core.utils import get_current_timestamp
 from nt_account.tasks import save_api_record_task
 import json
 
