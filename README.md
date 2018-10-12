@@ -39,6 +39,7 @@ DATABASES = {
         "PORT": "",
     },
 }
+```
 
 # Celery任务启动
 ```
