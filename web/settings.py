@@ -156,5 +156,22 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
+# ===================== cache =======================
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/4',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            "SERIALIZER": "django_redis.serializers.json.JSONSerializer",
+            'CONNECTION_POOL_KWARGS': {
+                'max_connections': 100,
+            },
+            'PARSER_CLASS': 'redis.connection.HiredisParser',
+        },
+        'TIMEOUT': 60 * 60 * 2,
+    }
+}
+
 # 允许跨域访问
 CORS_ORIGIN_ALLOW_ALL = True
