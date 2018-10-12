@@ -29,16 +29,16 @@ class SparkSql(object):
         :return:
         """
         connector_url = 'jdbc:mysql://{0}:{1}/{2}'.format(
-            DATABASES['HOST'],
-            DATABASES['PORT'],
-            DATABASES['NAME']
+            DATABASES['default']['HOST'],
+            DATABASES['default']['PORT'],
+            DATABASES['default']['NAME']
         )
 
         self.connector = self.spark.read \
             .format("jdbc") \
             .option("url", connector_url) \
-            .option("user", DATABASES['USER']) \
-            .option("password", DATABASES['PASSWORD'])
+            .option("user", DATABASES['default']['USER']) \
+            .option("password", DATABASES['default']['PASSWORD'])
 
     def load_table_dataframe(self, table_name):
         """
