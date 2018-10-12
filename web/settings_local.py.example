@@ -1,7 +1,7 @@
 """
 本地开发的配置文件
 """
-from ccnu_resource.settings import *
+from web.settings import *
 
 DEBUG = True
 
@@ -10,7 +10,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.mysql",
         "HOST": "127.0.0.1",
         "USER": "root",
-        "NAME": "ccnu_resource",
+        "NAME": "test_cpass",
         "PASSWORD": "password",
         "PORT": "",
     },
@@ -33,22 +33,3 @@ REDIS_CACHE_SETTINGS = {
     'auth': None,
     'db': 10
 }
-
-# celery server settings
-CELERY_SETTINGS = {
-    'namespace': 'ccnu_resource',
-    'broker_url': 'redis://localhost:6379/0',
-    'result_backend': 'redis://localhost:6379/1'
-}
-
-"""
-# debug toolbar
-CONFIG_DEFAULTS = {
-    # 因为默认使用google的jquery，国内访问不到
-    'JQUERY_URL': '//cdn.bootcss.com/jquery/2.1.4/jquery.min.js',
-}
-# 这些请求地址显示debug toolbar（注：后面的2个地址是我本地请求地址）
-INTERNAL_IPS = (
-    "127.0.0.1", "192.168.33.11", "191.168.56.1", "192.168.33.1"
-)
-"""
