@@ -25,4 +25,5 @@ urlpatterns = [
         permission_classes=(AllowAny,)
     )),
     url(r'^nt_account/', include('nt_account.urls')),
+    url(r'^nt_app/', include('nt_app.urls')),
 ]

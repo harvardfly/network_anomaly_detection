@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # 自定义app
     'nt_core',
     'nt_account',
+    'nt_app'
 ]
 
 MIDDLEWARE = [
