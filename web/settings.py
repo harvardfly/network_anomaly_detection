@@ -91,12 +91,6 @@ DATABASES = {
     },
 }
 
-CELERY_SETTINGS = {
-    'namespace': 'test_cpass',
-    'broker_url': 'redis://localhost:6379/0',
-    'result_backend': 'redis://localhost:6379/1'
-}
-
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
