@@ -1,4 +1,4 @@
-"""
+"""ccnu_data URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.8/topics/http/urls/
@@ -14,12 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import include, url
-from django.contrib import admin
-
-# from django.conf import settings
+from rest_framework.documentation import include_docs_urls
+from nt_account.authentication_doc import NtAuthenticationDoc
+from rest_framework.permissions import AllowAny
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^api_v1/', include('web.urls_api_v1')),
-    # namespace="polls"  django2的一个坑
+    url(r'^docs/', include_docs_urls(
+        title='API接口文档',
+        authentication_classes=(NtAuthenticationDoc,),
+        permission_classes=(AllowAny,)
+    )),
+    url(r'^nt_account/', include('nt_account.urls')),
 ]

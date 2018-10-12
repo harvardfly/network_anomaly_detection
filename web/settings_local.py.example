@@ -33,3 +33,10 @@ REDIS_CACHE_SETTINGS = {
     'auth': None,
     'db': 10
 }
+
+# celery settings
+CELERY_SETTINGS = {
+    'namespace': 'test_cpass',
+    'broker_url': 'redis://localhost:6379/0',
+    'result_backend': 'redis://localhost:6379/1'
+}
