@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'nt_core',
     'nt_account',
     'nt_app',
-    'nt_resource'
+    'nt_resource',
+    'nt_spark'
 ]
 
 MIDDLEWARE = [
@@ -167,6 +168,47 @@ CACHES = {
         },
         'TIMEOUT': 60 * 60 * 2,
     }
+}
+
+# ============================ logging ==========================oo]
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(pathname)s %(module)s '
+                      '%(lineno)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'null': {
+            'level': 'ERROR',
+            'class': 'logging.NullHandler',
+        },
+        'console': {
+            'level': 'ERROR',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level': 'ERROR',
+        },
+        'rq.worker': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+        'django_crontab.crontab': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+    },
 }
 
 # ===========================cron==========================

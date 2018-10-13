@@ -22,3 +22,4 @@ django-cors-headers==2.4.0
 django-extensions==2.1.3
 mysqlclient==1.3.12
 jsonfield==2.0.2
+django==crontab-0.7.1
