@@ -17,7 +17,6 @@ def get_cache_kmeans_result(appid, start_time, end_time, force=False):
     key = 'GET_KMEANS_RESULT_{0}_FROM_{1}_TO_{2}'.format(
         appid, start_time, end_time
     )
-    print(key)
     content = cache.get(key)
     if force or not content:
         content = get_kmeans_result(appid, start_time, end_time)

@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 
 pre_current_dir = os.path.dirname(os.getcwd())
 sys.path.append(pre_current_dir)
@@ -93,4 +94,5 @@ def get_kmeans_result(appid, start_time, end_time):
             result_data=content
         )
     ser_data = CatResultDataSerializer(cat_result_obj).data
+    ser_data['result_data'] = json.loads(ser_data['result_data'])
     return ser_data
