@@ -26,4 +26,6 @@ urlpatterns = [
     )),
     url(r'^nt_account/', include('nt_account.urls')),
     url(r'^nt_app/', include('nt_app.urls')),
+    url(r'^nt_resource/', include('nt_resource.urls')),
+    url(r'^nt_spark/', include('nt_spark.urls')),
 ]

@@ -8,11 +8,9 @@ from nt_spark.spark_sql_base import SparkSql
 from pyspark.mllib.clustering import (
     KMeans
 )
-from pyspark.mllib.tree import (
-    RandomForest, RandomForestModel
-)
 from numpy import array
-from math import sqrt
+from nt_spark.models import CatResultData
+from nt_spark.serializers import CatResultDataSerializer
 
 
 class SparkAnomaly(object):
@@ -58,7 +56,7 @@ class SparkAnomaly(object):
         parsed_data_rdd = df.rdd.map(lambda x: array([x[4], x[5], x[6]]))
         clusters = self.get_kmeans_model()
         predict_result = clusters.predict(parsed_data_rdd)
-        return predict_result
+        return predict_result.collect()
 
     def get_random_forest_model(self):
         """
@@ -70,5 +68,29 @@ class SparkAnomaly(object):
         pass
 
 
-test = SparkAnomaly(110312, 1538331058000, 1539934343000)
-test.get_kmeans_predict()
+def get_kmeans_result(appid, start_time, end_time):
+    """
+    获取appid指定时间段的cat数据
+    :param appid:
+    :param start_time:
+    :param end_time:
+    :return:
+    """
+    cat_result_obj = CatResultData.objects.filter(
+        appid=appid,
+        start_time=start_time,
+        end_time=end_time,
+        algorithm_name="kmeans"
+    ).first()
+    if not cat_result_obj:
+        arg_result = SparkAnomaly(appid, start_time, end_time)
+        content = arg_result.get_kmeans_predict()
+        cat_result_obj = CatResultData.objects.create(
+            appid=appid,
+            start_time=start_time,
+            end_time=end_time,
+            algorithm_name="kmeans",
+            result_data=content
+        )
+    ser_data = CatResultDataSerializer(cat_result_obj).data
+    return ser_data
