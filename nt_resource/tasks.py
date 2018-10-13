@@ -1,20 +1,41 @@
 from web.celery import app as celery_app
 from nt_core.exceptions import RsError
+from nt_resource.utils import (
+    add_cat_data,
+    add_normal_cat_data
+)
+from nt_resource.models import CatNormalResource
 
 
 @celery_app.task
-def insert_es_question_task(qid):
+def insert_cat_data(start_time, end_time):
     """
-    使用异步任务执行试题插入
-    :param qid:
+    使用异步,批量插入指定时间段的cat数据
+    :param start_time:
+    :param end_time:
     :return:
     """
-    from rs_question.views import EsQuestionInsert
     try:
-        EsQuestionInsert.es_question_insert(qid)
+        for i in add_cat_data(start_time, end_time):
+            CatNormalResource.objects.bulk_create(i)
     except Exception as e:
         print(e)
-        raise RsError('试题插入ES数据库失败')
+        raise RsError('插入数据库失败')
+
+
+@celery_app.task
+def insert_normal_cat_data(data):
+    """
+    使用异步，每次用bulk 批量插入 1000条数据
+    :param data:
+    :return:
+    """
+    try:
+        for i in add_normal_cat_data(data):
+            CatNormalResource.objects.bulk_create(i)
+    except Exception as e:
+        print(e)
+        raise RsError('插入数据库失败')
 
 
 @celery_app.task(bind=True, default_retry_delay=60, max_retries=2)

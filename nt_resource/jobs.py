@@ -3,7 +3,7 @@ import logging
 import datetime
 
 from nt_app.cache import get_cache_cat_data
-from nt_resource.utils import insert_normal_cat_data
+from nt_resource.tasks import insert_normal_cat_data
 from nt_core.utils import (
     get_current_timestamp,
     convert_datetime_to_timestamp
@@ -26,4 +26,4 @@ def insert_normal_cat_job():
     start_time = convert_datetime_to_timestamp(dt_time)
     end_time = get_current_timestamp()
     data = get_cache_cat_data(start_time, end_time)
-    insert_normal_cat_data(data)
+    insert_normal_cat_data.delay(data)
