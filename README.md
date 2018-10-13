@@ -47,5 +47,6 @@ DATABASES = {
 
 # Celery任务启动
 ```
-$ celery -A test_cpass worker -l info
+$ celery -A web worker -l info  启动celery
+$ celery flower -A web --address=0.0.0.0 --port=6666  启动celery flower
 ```

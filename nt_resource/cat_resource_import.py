@@ -10,4 +10,4 @@ application = get_wsgi_application()
 
 from nt_resource.utils import insert_cat_data  # NoQA
 
-insert_cat_data(1538331058000, 1539934343000)
+insert_cat_data.delay(1538331058000, 1539934343000)
