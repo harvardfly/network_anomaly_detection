@@ -6,7 +6,7 @@ sys.path.append(pre_current_dir)
 
 from nt_spark.spark_sql_base import SparkSql
 from pyspark.mllib.clustering import (
-    KMeans, KMeansModel
+    KMeans
 )
 from pyspark.mllib.tree import (
     RandomForest, RandomForestModel
@@ -22,44 +22,43 @@ class SparkAnomaly(object):
         self.end_time = end_time
         self.spark_sql = SparkSql()
         self.cat_res = self.spark_sql.load_table_dataframe('cat_resource')
+        self.cat_normal_res = self.spark_sql.load_table_dataframe(
+            'cat_normal_resource'
+        )
         self.filter_str = "appid = {0} " \
                           "and create_time >= {1} " \
                           "and update_time <= {2}".format(
             self.appid, self.start_time, self.end_time,
         )
+        self.model_filter_str = "appid = {0}".format(self.appid)
 
     def get_kmeans_model(self):
         """
-        读取表的dataframe
+        得到kmeans聚类模型
         :return:
         """
-        df = self.cat_res.filter(self.filter_str)
+        df = self.cat_normal_res.filter(self.model_filter_str)
         parsed_data_rdd = df.rdd.map(lambda x: array([x[4], x[5], x[6]]))
 
         # 建立聚类模型
         clusters = KMeans.train(
-            parsed_data_rdd, 2,
+            parsed_data_rdd, 3,
             maxIterations=10,
             initializationMode="random"
         )
 
-        # Evaluate clustering by computing Within Set Sum of Squared Errors
-        def error(point):
-            center = clusters.centers[clusters.predict(point)]
-            return sqrt(sum([x ** 2 for x in (point - center)]))
+        return clusters
 
-        WSSSE = parsed_data_rdd.map(lambda point: error(point)).reduce(lambda x, y: x + y)
-        print("Within Set Sum of Squared Error = " + str(WSSSE))
-
-        # # 保存 训练好的模型
-        # # model_path = "{}/kmeans_model".format(current_dir)
-        # # if not os.path.exists(model_path):
-        # #     clusters.save(sc, model_path)
-        # #
-        # # trained_model = KMeansModel.load(
-        # #     sc, "{}/kmeans_model".format(current_dir)
-        # # )
-        # # return trained_model
+    def get_kmeans_predict(self):
+        """
+        获取appid指定时间段的预测结果
+        :return:
+        """
+        df = self.cat_res.filter(self.filter_str)
+        parsed_data_rdd = df.rdd.map(lambda x: array([x[4], x[5], x[6]]))
+        clusters = self.get_kmeans_model()
+        predict_result = clusters.predict(parsed_data_rdd)
+        return predict_result
 
     def get_random_forest_model(self):
         """
@@ -71,5 +70,5 @@ class SparkAnomaly(object):
         pass
 
 
-test = SparkAnomaly(110312, 1539331733000, 1539334343000)
-test.get_kmeans_model()
+test = SparkAnomaly(110312, 1538331058000, 1539934343000)
+test.get_kmeans_predict()

@@ -95,7 +95,7 @@ class CatResourceListView(ListAPIView):
                 elif filed in ['start_time']:
                     filters['create_time__gt'] = field_val
                 elif filed in ['end_time']:
-                    filters['create_time__lt'] = field_val
+                    filters['end_time__lt'] = field_val
                 elif filed in ['response_time', 'request_count', 'fail_count']:
                     filters['{}__gte'.format(filed)] = field_val
                     filters['{}__lte'.format(filed)] = field_val

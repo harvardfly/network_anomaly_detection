@@ -35,16 +35,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework.authtoken',
+    'django_crontab',
 
     # 第三方库
     'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',
 
     # 自定义app
     'nt_core',
     'nt_account',
-    'nt_app'
+    'nt_app',
+    'nt_resource'
 ]
 
 MIDDLEWARE = [
@@ -166,6 +168,19 @@ CACHES = {
         'TIMEOUT': 60 * 60 * 2,
     }
 }
+
+# ===========================cron==========================
+CRONJOBS_LOG_PATH = ">> /tmp/var/logs/{0}".format('django-crontab.log')
+
+CRONJOBS = [
+    # filled with * * * * *  [minute,hour,day,month,week]
+    ('0 * * * *',
+     'nt_resource.jobs.my_scheduled_job', CRONJOBS_LOG_PATH),
+
+    ('1 0 * * *',
+     'nt_resource.jobs.insert_normal_cat_job', CRONJOBS_LOG_PATH),
+
+]
 
 # 允许跨域访问
 CORS_ORIGIN_ALLOW_ALL = True

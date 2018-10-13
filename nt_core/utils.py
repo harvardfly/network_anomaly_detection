@@ -23,6 +23,16 @@ def convert_timestamp_to_datetime(timestamp):
     return str(time_array)
 
 
+def convert_datetime_to_timestamp(dtime):
+    """
+    把datetime转换为时间戳
+    :param datetime:
+    :return:
+    """
+    timestamp = time.mktime(dtime.timetuple())
+    return int(timestamp) * 1000
+
+
 def object_list_to_dict(obj_list, primary_key='id'):
     """
     将list 转化为以primary_key为key的dict

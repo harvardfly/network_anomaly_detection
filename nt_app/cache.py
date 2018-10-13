@@ -1,38 +1,26 @@
 # coding:utf-8
 import time
 from django.core.cache import cache
+from nt_app.utils import get_cat_res_data
+
 
 CACHE_TIMEOUT_DEFAULT = 7 * 24 * 60 * 60
 
 
-# def get_cognition_num(name, subject, faculty):
-#     """
-#     请求公库接口，根据认知点名字、学科获取认知点num
-#     :param name:
-#     :param subject:
-#     :param faculty:
-#     :return:
-#     """
-#     key = 'GET_COGNITION_NUM_{0}_{1}_{2}'.format(
-#         hash(name), subject, faculty
-#     )
-#     content = cache.get(key)
-#     if not content:
-#         cog_num_url = settings.GET_COGNITION_NUM_URI.format(
-#             settings.RS_SETTINGS['PUBLIC_HOST'],
-#             name, subject
-#         )
-#         params = {
-#             'name': name,
-#             'subject': subject,
-#             'faculty': faculty
-#         }
-#
-#         content = request_with_token(
-#             'get',
-#             cog_num_url,
-#             params=params
-#         )
-#         cache.set(key, content, timeout=CACHE_TIMEOUT_DEFAULT)
-#
-#     return content
+def get_cache_cat_data(start_time, end_time, force=False):
+    """
+    获取指定时间段的cat数据
+    :param start_time:
+    :param end_time:
+    :return:
+    """
+    key = 'GET_CAT_RES_DATA_{0}_TO_{1}'.format(
+        start_time, end_time
+    )
+    content = cache.get(key)
+    if force or not content:
+        content = get_cat_res_data(start_time, end_time)
+        if content:
+            cache.set(key, content, timeout=CACHE_TIMEOUT_DEFAULT)
+
+    return content
