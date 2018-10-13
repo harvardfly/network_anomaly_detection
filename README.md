@@ -1,7 +1,8 @@
 # 网络服务异常检测系统
 ```angular2html
 基于Django Restframework和Spark的异常检测系统，数据库为MySQL、Redis,
-消息队列为Celery，分析服务为Spark SQL和Spark Mllib
+消息队列为Celery，分析服务为Spark SQL和Spark Mllib;
+每天0点1分自动运行定时job从全量数据中导入正常的cat数据，该数据用于kmeans做模型训练
 ```
 
 
