@@ -26,6 +26,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+AUTH_USER_MODEL = 'nt_user.UserProfile'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -36,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_crontab',
+    'django_filters',
 
     # 第三方库
     'corsheaders',
@@ -43,14 +46,16 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
 
     # 自定义app
+    'nt_user.apps.NtUserConfig',
     'nt_core',
     'nt_account',
     'nt_app',
     'nt_resource',
-    'nt_spark'
+    'nt_spark',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # 解决CORS跨域问题  最好放在csrf前
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -80,6 +85,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'web.wsgi.application'
 
+JWT_AUTH = {
+
+}
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -139,6 +147,7 @@ STATIC_ROOT = 'static'
 # rest framework config
 #############################
 REST_FRAMEWORK = {
+    # 禁用Browsable API
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     ),
@@ -146,11 +155,17 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'nt_account.authentication.NtAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
     'EXCEPTION_HANDLER': 'nt_core.exception_handle.rs_exception_handler',
     'DEFAULT_PAGINATION_CLASS': 'nt_core.pagination.RsPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    )
 }
 
 # ===================== cache =======================

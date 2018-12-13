@@ -7,6 +7,7 @@ class CatNormalResource(BaseModel):
     response_time = models.FloatField(blank=True, null=True)
     request_count = models.IntegerField(blank=True, null=True)
     fail_count = models.IntegerField(blank=True, null=True)
+    click_num = models.IntegerField(blank=True, null=True, default=0)
 
     class Meta:
         db_table = 'cat_normal_resource'

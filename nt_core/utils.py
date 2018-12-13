@@ -4,6 +4,8 @@ from operator import itemgetter
 import cgi
 from xml.sax.saxutils import unescape
 
+REGEX_MOBILE = "^1[3456789]\d{9}$"
+
 
 def get_current_timestamp():
     """

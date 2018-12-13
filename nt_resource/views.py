@@ -1,6 +1,12 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView
+from rest_framework import mixins
+from rest_framework.viewsets import GenericViewSet
+from django_filters.rest_framework import DjangoFilterBackend
+from nt_resource.filters import CatNormalResourceFilter
+from rest_framework import filters
+from nt_core.pagination import RsPagination
+
 from nt_core.exceptions import RsError
 
 from nt_resource.models import CatNormalResource
@@ -54,38 +60,39 @@ class CatNormalResourceView(APIView):
         return Response({"result": True, "rows": rows})
 
 
-class CatNormalResourceListView(ListAPIView):
-    cat_search_fields = [
-        'appid', 'id', 'response_time', 'request_count',
-        'start_time', 'end_time', 'fail_count'
-    ]
-
+class CatNormalResourceListView(mixins.ListModelMixin,
+                                mixins.RetrieveModelMixin,
+                                GenericViewSet):
+    """
+    搜索、过滤、排序
+    """
+    queryset = CatNormalResource.objects.all()
     serializer_class = CatNormalResourceListSerializer
+    filter_backends = (
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter
+    )
+    filter_class = CatNormalResourceFilter
+    pagination_class = RsPagination
 
-    def list(self, request, *args, **kwargs):
-        filters = self.generate_filter(request)
-        cat_normal_lists = CatNormalResource.objects.filter(
-            **filters
-        ).order_by('-update_time')
-        page_data = self.paginate_queryset(cat_normal_lists)
-        serializer = self.serializer_class(page_data, many=True)
+    # 前端参数  search  如查找appid为1212开头的 search=1212
+    search_fields = ('^appid',)
 
-        return self.get_paginated_response(serializer.data)
+    # 前端参数 ordering  升序:create_time 降序:-create_time
+    ordering_fields = ('create_time', 'update_time')
 
-    def generate_filter(self, request):
-        req_data = request.GET
-        filters = {}
-        for filed in self.cat_search_fields:
-            field_val = req_data.get(filed)
-            if field_val:
-                if filed in ['id', 'appid']:
-                    filters[filed] = field_val
-                elif filed in ['start_time']:
-                    filters['create_time__gt'] = field_val
-                elif filed in ['end_time']:
-                    filters['create_time__lt'] = field_val
-                elif filed in ['response_time', 'request_count', 'fail_count']:
-                    filters['{}__gte'.format(filed)] = field_val
-                    filters['{}__lte'.format(filed)] = field_val
-
-        return filters
+    def retrieve(self, request, *args, **kwargs):
+        """
+        获取单条记录的详情
+        如：cat_normal_list/9e1fdbbf-f399-45f3-979a-c48d8bf4fae6
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        instance = self.get_object()
+        instance.click_num += 1
+        instance.save()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
