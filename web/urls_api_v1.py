@@ -16,7 +16,6 @@ Including another URLconf
 from django.conf.urls import include, url
 from rest_framework.documentation import include_docs_urls
 from rest_framework.permissions import AllowAny
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken import views
 from rest_framework_jwt.views import obtain_jwt_token
 
@@ -35,11 +34,13 @@ urlpatterns = [
         ),
 
     # jwt的认证接口
-    url(r'^login/', obtain_jwt_token),
+    url(r'^login/$', obtain_jwt_token),
 
     url(r'^nt_user/', include('nt_user.urls')),
     url(r'^nt_account/', include('nt_account.urls')),
     url(r'^nt_app/', include('nt_app.urls')),
     url(r'^nt_resource/', include('nt_resource.urls')),
     url(r'^nt_spark/', include('nt_spark.urls')),
+    # 第三方登录url
+    url('', include('social_django.urls', namespace='social')),
 ]

@@ -37,3 +37,11 @@ django-redis==4.10.0
 Hiredis==0.3.0
 PyJWT==1.7.1
 djangorestframework-jwt==1.11.0
+drf-extensions==0.4.0
+defusedxml==0.5.0
+oauthlib==2.1.0
+python3-openid==3.1.0
+requests-oauthlib==1.0.0
+social-auth-app-django==3.1.0
+social-auth-core==2.0.0
+raven==6.9.0

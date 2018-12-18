@@ -50,3 +50,18 @@ DATABASES = {
 $ celery -A web worker -l info  启动celery
 $ celery flower -A web --address=0.0.0.0 --port=6666  启动celery flower
 ```
+
+# 新增用户管理模块，JWT TOKEN登录验证
+```
+nt_user 用户管理模块
+```
+
+# 新增接入第三方登录Oauth2.0，授权微博、QQ、微信登录
+```
+social_core social_django 第三方登录
+```
+
+# 新增Senty监控服务告警  服务500错误邮件告警
+```
+raven senty
+```

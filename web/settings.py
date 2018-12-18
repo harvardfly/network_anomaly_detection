@@ -10,7 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
+import datetime
+
 import os
+import raven
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -44,6 +47,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
+    'social_django',
+    'raven.contrib.django.raven_compat',
 
     # 自定义app
     'nt_user.apps.NtUserConfig',
@@ -78,6 +83,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -85,11 +92,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'web.wsgi.application'
 
+TOKEN_EXPIRE_TIME = 7 * 24 * 3600
 JWT_AUTH = {
-
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=TOKEN_EXPIRE_TIME),
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
 }
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
+
 
 DATABASES = {
     "default": {
@@ -123,6 +133,13 @@ AUTH_PASSWORD_VALIDATORS = [
                  'password_validation.NumericPasswordValidator'),
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.weibo.WeiboOAuth2',
+    'social_core.backends.qq.QQOAuth2',
+    'social_core.backends.weixin.WeixinOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -165,7 +182,27 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
-    )
+    ),
+
+    # 使用throttle对api限速
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ),
+    # anon:用户未登录时(根据ip地址判断) 一分钟最多访问3次
+    # user:用户登录时 一分钟最多访问10次
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '3/minute',
+        'user': '10/minute'
+    }
+}
+
+# DRF扩展
+REST_FRAMEWORK_EXTENSIONS = {
+    # 缓存时间
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60 * 60,
+    # 缓存存储
+    'DEFAULT_USE_CACHE': 'default',
 }
 
 # ===================== cache =======================
@@ -241,3 +278,11 @@ CRONJOBS = [
 
 # 允许跨域访问
 CORS_ORIGIN_ALLOW_ALL = True
+
+SOCIAL_AUTH_WEIBO_KEY = ''
+SOCIAL_AUTH_WEIBO_SECRET = ''
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = ''
+
+RAVEN_CONFIG = {
+
+}

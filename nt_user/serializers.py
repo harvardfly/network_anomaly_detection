@@ -2,6 +2,7 @@ import re
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework.validators import UniqueValidator
+from nt_user.models import UserFeedbackMessage
 
 from nt_core.utils import REGEX_MOBILE
 
@@ -79,3 +80,13 @@ class UserRegSerializer(serializers.ModelSerializer):
         #     )
         # ]
         fields = ("username", "mobile", "password")
+
+
+class FeedbackMessageSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+
+    class Meta:
+        model = UserFeedbackMessage
+        fields = "__all__"

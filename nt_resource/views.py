@@ -5,10 +5,15 @@ from rest_framework.viewsets import GenericViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from nt_resource.filters import CatNormalResourceFilter
 from rest_framework import filters
+from rest_framework_extensions.cache.mixins import CacheResponseMixin
+from rest_framework_extensions.cache.decorators import cache_response
+from rest_framework.throttling import (
+    UserRateThrottle,
+    AnonRateThrottle
+)
+
 from nt_core.pagination import RsPagination
-
 from nt_core.exceptions import RsError
-
 from nt_resource.models import CatNormalResource
 from nt_resource.serializers import (
     CatNormalResourceListSerializer
@@ -16,6 +21,11 @@ from nt_resource.serializers import (
 
 
 class CatNormalResourceView(APIView):
+    """
+    rest_framework自带的缓存
+    """
+
+    @cache_response(timeout=60 * 60, cache='default')
     def get(self, request):
         req_data = request.GET
         _id = req_data.get('id')
@@ -62,12 +72,21 @@ class CatNormalResourceView(APIView):
 
 class CatNormalResourceListView(mixins.ListModelMixin,
                                 mixins.RetrieveModelMixin,
+                                CacheResponseMixin,
                                 GenericViewSet):
     """
+    CacheResponseMixin是rest_framework的缓存，
+    为视图集同时补充List和Retrieve两种缓存，
+    与ListModelMixin和RetrieveModelMixin一起配合使用
+    可在settings设置过期时间
     搜索、过滤、排序
     """
-    queryset = CatNormalResource.objects.all()
+    # 设置用户每分钟最多访问10次  非用户每分钟最多访问3次
+
+    throttle_classes = (UserRateThrottle, AnonRateThrottle)
+    queryset = CatNormalResource.objects.all().order_by("-create_time")
     serializer_class = CatNormalResourceListSerializer
+
     filter_backends = (
         DjangoFilterBackend,
         filters.SearchFilter,
