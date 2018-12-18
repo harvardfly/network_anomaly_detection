@@ -108,3 +108,4 @@ static/*
 uwsgi.ini
 celery.conf
 message/images/*
+settings_local.py
