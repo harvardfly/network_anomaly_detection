@@ -92,7 +92,6 @@ class FeedbackMessageViewset(mixins.CreateModelMixin,
     authentication_classes = (JSONWebTokenAuthentication,)
 
     def get_queryset(self):
-        1/0
         return UserFeedbackMessage.objects.filter(
             user=self.request.user
         )

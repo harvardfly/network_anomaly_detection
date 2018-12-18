@@ -107,3 +107,4 @@ static/*
 
 uwsgi.ini
 celery.conf
+message/images/*

@@ -40,3 +40,11 @@ CELERY_SETTINGS = {
     'broker_url': 'redis://localhost:6379/0',
     'result_backend': 'redis://localhost:6379/1'
 }
+
+RAVEN_CONFIG = {
+    'dsn': 'http://',
+}
+
+SOCIAL_AUTH_WEIBO_KEY = ''
+SOCIAL_AUTH_WEIBO_SECRET = ''
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = ''
