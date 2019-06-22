@@ -286,3 +286,16 @@ SOCIAL_AUTH_LOGIN_REDIRECT_URL = ''
 RAVEN_CONFIG = {
 
 }
+
+# ASGI server setup
+ASGI_APPLICATION = 'web.routing.application'
+
+# 频道层的缓存
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis://127.0.0.1", 6379)],  # channel layers缓存使用Redis
+        },
+    },
+}

@@ -45,3 +45,29 @@ requests-oauthlib==1.0.0
 social-auth-app-django==3.1.0
 social-auth-core==2.0.0
 raven==6.9.0
+
+# channels
+Automat==0.7.0
+PyHamcrest==1.9.0
+asgiref==3.1.2
+asn1crypto==0.24.0
+async-timeout==2.0.1
+attrs==19.1.0
+autobahn==19.6.2
+cffi==1.12.3
+channels==2.2.0
+constantly==15.1.0
+cryptography==2.7
+daphne==2.3.0
+hyperlink==19.0.0
+incremental==17.5.0
+pycparser==2.19
+twisted==19.2.1
+txaio==18.8.1
+zope.interface==4.6.0
+
+# channels-redis
+aioredis==1.2.0
+asgiref==2.3.2
+channels-redis==2.3.2
+msgpack==0.5.6
