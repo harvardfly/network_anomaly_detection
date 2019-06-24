@@ -14,8 +14,8 @@ from django.template.loader import render_to_string
 
 from channels.layers import get_channel_layer
 
-from zanhu.messager.models import Message
-from zanhu.helpers import ajax_required
+from messager.models import Message
+# from helpers import ajax_required
 
 
 class MessagesListView(LoginRequiredMixin, ListView):
@@ -54,7 +54,7 @@ class ConversationListView(MessagesListView):
 
 
 @login_required
-@ajax_required
+# @ajax_required
 @require_http_methods(["POST"])
 def send_message(request):
     """发送消息，AJAX POST请求"""

@@ -4,7 +4,7 @@
 
 from django.urls import path
 
-from zanhu.notifications import views
+from notifications import views
 
 app_name = 'notifications'
 

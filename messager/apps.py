@@ -6,5 +6,5 @@ from django.apps import AppConfig
 
 
 class MessagerConfig(AppConfig):
-    name = 'zanhu.messager'
+    name = 'messager'
     verbose_name = '消息'

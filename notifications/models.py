@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
-# __author__ = '__Jack__'
 
 
 from __future__ import unicode_literals
@@ -67,18 +66,34 @@ class Notification(models.Model):
         ('O', '退出'),  # logged out
     )
     uuid_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    actor = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="notify_actor",
-                              on_delete=models.CASCADE, verbose_name="触发者")
-    recipient = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=False,
-                                  related_name="notifications", on_delete=models.CASCADE, verbose_name='接收者')
+    actor = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name="notify_actor",
+        on_delete=models.CASCADE, verbose_name="触发者"
+    )
+    recipient = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=False,
+        related_name="notifications",
+        on_delete=models.CASCADE, verbose_name='接收者'
+    )
     unread = models.BooleanField(default=True, verbose_name='未读')
-    slug = models.SlugField(max_length=80, null=True, blank=True, verbose_name='(URL)别名')
-    verb = models.CharField(max_length=1, choices=NOTIFICATION_TYPE, verbose_name="通知类别")
-    created_at = models.DateTimeField(db_index=True, auto_now_add=True, verbose_name='创建时间')
-    updated_at = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+    slug = models.SlugField(
+        max_length=80, null=True, blank=True, verbose_name='(URL)别名'
+    )
+    verb = models.CharField(
+        max_length=1, choices=NOTIFICATION_TYPE, verbose_name="通知类别"
+    )
+    created_at = models.DateTimeField(
+        db_index=True, auto_now_add=True, verbose_name='创建时间'
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True, verbose_name='更新时间'
+    )
 
-    content_type = models.ForeignKey(ContentType, related_name='notify_action_object', null=True, blank=True,
-                                     on_delete=models.CASCADE)
+    content_type = models.ForeignKey(
+        ContentType, related_name='notify_action_object',
+        null=True, blank=True,
+        on_delete=models.CASCADE
+    )
     object_id = models.CharField(max_length=255, null=True, blank=True)
     action_object = GenericForeignKey()  # 或GenericForeignKey("content_type", "object_id")
 
@@ -91,13 +106,13 @@ class Notification(models.Model):
 
     def __str__(self):
         if self.action_object:
-            return f'{self.actor} {self.get_verb_display()} {self.action_object}'
-        return f'{self.actor} {self.get_verb_display()}'
+            return '{self.actor} {self.get_verb_display()} {self.action_object}'
+        return '{self.actor} {self.get_verb_display()}'
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         if not self.slug:
-            self.slug = slugify(f'{self.recipient} {self.uuid_id} {self.verb}')
+            self.slug = slugify('{self.recipient} {self.uuid_id} {self.verb}')
         super(Notification, self).save()
 
     def mark_as_read(self):

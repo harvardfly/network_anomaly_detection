@@ -57,6 +57,10 @@ INSTALLED_APPS = [
     'nt_app',
     'nt_resource',
     'nt_spark',
+
+    # Web Socket
+    'messager.apps.MessagerConfig',
+    'notifications.apps.NotificationsConfig',
 ]
 
 MIDDLEWARE = [

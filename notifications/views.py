@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
-# __author__ = '__Jack__'
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -11,7 +10,7 @@ from django.views.generic import ListView
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
-from zanhu.notifications.models import Notification
+from notifications.models import Notification
 
 
 class NotificationUnreadListView(LoginRequiredMixin, ListView):
@@ -30,7 +29,7 @@ def mark_all_as_read(request):
     request.user.notifications.mark_all_as_read()
     redirect_url = request.GET.get('next')
 
-    messages.add_message(request, messages.SUCCESS, f'用户{request.user.username}的所有通知标为已读')
+    messages.add_message(request, messages.SUCCESS, '用户{request.user.username}的所有通知标为已读')
 
     if redirect_url:
         return redirect(redirect_url)
@@ -46,7 +45,9 @@ def mark_as_read(request, slug):
 
     redirect_url = request.GET.get('next')
 
-    messages.add_message(request, messages.SUCCESS, f'通知{notification}标为已读')
+    messages.add_message(
+        request, messages.SUCCESS, '通知{notification}标为已读'
+    )
 
     if redirect_url:
         return redirect(redirect_url)

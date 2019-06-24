@@ -1,12 +1,11 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
-# __author__ = '__Jack__'
 
 from django.test import Client
 from django.urls import reverse
 from test_plus.test import TestCase
 
-from zanhu.messager.models import Message
+from messager.models import Message
 
 
 class MessagesViewsTests(TestCase):

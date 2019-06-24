@@ -40,7 +40,12 @@ urlpatterns = [
     url(r'^nt_account/', include('nt_account.urls')),
     url(r'^nt_app/', include('nt_app.urls')),
     url(r'^nt_resource/', include('nt_resource.urls')),
-    url(r'^nt_spark/', include('nt_spark.urls')),
+    # url(r'^nt_spark/', include('nt_spark.urls')),
+
     # 第三方登录url
     url('', include('social_django.urls', namespace='social')),
+
+    url(r'messages/', include('messager.urls', namespace='messages')),
+    url(r'notifications/', include('notifications.urls', namespace='notifications')),
+
 ]

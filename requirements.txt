@@ -71,3 +71,5 @@ aioredis==1.2.0
 asgiref==2.3.2
 channels-redis==2.3.2
 msgpack==0.5.6
+python-slugify==3.0.2
+text-unidecode==1.2

@@ -1,10 +1,9 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
-# __author__ = '__Jack__'
 
 from django.urls import path
 
-from zanhu.messager import views
+from messager import views
 
 app_name = 'messager'
 
