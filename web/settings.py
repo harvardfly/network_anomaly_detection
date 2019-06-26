@@ -33,6 +33,10 @@ AUTH_USER_MODEL = 'nt_user.UserProfile'
 
 # Application definition
 
+# STATICFILES_DIRS = [  # 引用位于STATIC_ROOT中的静态文件时使用的网址
+#     str(APPS_DIR.path('staticfiles')),
+# ]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -49,6 +53,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'social_django',
     'raven.contrib.django.raven_compat',
+    'channels',
+    'haystack',
 
     # 自定义app
     'nt_user.apps.NtUserConfig',
@@ -61,6 +67,9 @@ INSTALLED_APPS = [
     # Web Socket
     'messager.apps.MessagerConfig',
     'notifications.apps.NotificationsConfig',
+
+    # search
+    'search.apps.SearchConfig'
 ]
 
 MIDDLEWARE = [
@@ -78,14 +87,30 @@ ROOT_URLCONF = 'web.urls'
 
 TEMPLATES = [
     {
+        # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-BACKEND
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        # https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
+        'DIRS': [
+            'templates',
+        ],
         'OPTIONS': {
+            # https://docs.djangoproject.com/en/dev/ref/settings/#template-debug
+            'debug': DEBUG,
+            # https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
+            # https://docs.djangoproject.com/en/dev/ref/templates/api/#loader-types
+            'loaders': [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+            ],
+            # https://docs.djangoproject.com/en/dev/ref/settings/#template-context-processors
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
@@ -303,3 +328,18 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        # 使用的Elasticsearch搜索引擎
+        'ENGINE': 'haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine',
+        # Elasticsearch连接的地址
+        'URL': 'http://192.168.33.11:9200/',
+        # 默认的索引名
+        'INDEX_NAME': 'network_anomaly',
+    }
+}
+
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 20  # 分页
+# 实时信号量处理器，模型类中数据增加、更新、删除时自动更新索引
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'

@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
-# __author__ = '__Jack__'
 
 from asgiref.sync import async_to_sync
 from django.shortcuts import render, get_object_or_404

@@ -73,3 +73,10 @@ channels-redis==2.3.2
 msgpack==0.5.6
 python-slugify==3.0.2
 text-unidecode==1.2
+
+# ES
+django-haystack-2.8.1
+elasticsearch-2.4.1
+
+# 测试用例
+django-test-plus==1.2.1

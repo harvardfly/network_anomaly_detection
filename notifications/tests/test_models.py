@@ -1,12 +1,10 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
-# __author__ = '__Jack__'
 
 from test_plus.test import TestCase
 
-from zanhu.news.models import News
-from zanhu.notifications.models import Notification
-from zanhu.notifications.views import notification_handler
+from notifications.models import Notification
+from notifications.views import notification_handler
 
 
 class NotificationsModelsTest(TestCase):
@@ -68,14 +66,3 @@ class NotificationsModelsTest(TestCase):
     @staticmethod
     def test_get_most_recent():
         assert Notification.objects.get_most_recent().count() == 3
-
-    def test_notification(self):
-        """单个通知"""
-        Notification.objects.mark_all_as_read()
-        obj = News.objects.create(
-            user=self.user,
-            content="内容示例",
-            reply=True
-        )
-        notification_handler(self.other_user, self.user, "C", obj)  # other_user评论了user
-        assert Notification.objects.unread().count() == 1

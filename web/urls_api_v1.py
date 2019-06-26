@@ -45,6 +45,9 @@ urlpatterns = [
     # 第三方登录url
     url('', include('social_django.urls', namespace='social')),
 
+    # 第三方搜索url
+    url('search/', include('haystack.urls')),
+
     url(r'messages/', include('messager.urls', namespace='messages')),
     url(r'notifications/', include('notifications.urls', namespace='notifications')),
 

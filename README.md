@@ -65,3 +65,14 @@ social_core social_django 第三方登录
 ```
 raven senty
 ```
+
+# 增加websocket channels模块
+```
+遵从asgi协议，灵活支持同步和异步
+```
+
+# 新增django-haystack和elasticsearch
+```
+支持自动从django orm映射index  signal自动更新index；
+缺陷是只支持ES 2.x及以下  比较鸡肋，建议还是用DSL或Elasticsearch
+```
