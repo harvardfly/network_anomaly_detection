@@ -53,8 +53,12 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'social_django',
     'raven.contrib.django.raven_compat',
+<<<<<<< 9d75abdb36c7db0b18c263b454dcef804ec5dd0a
     'channels',
     'haystack',
+=======
+    'channels'
+>>>>>>> stash
 
     # 自定义app
     'nt_user.apps.NtUserConfig',

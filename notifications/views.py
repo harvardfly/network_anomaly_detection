@@ -17,7 +17,6 @@ class NotificationUnreadListView(LoginRequiredMixin, ListView):
     """未读通知列表"""
     model = Notification
     context_object_name = 'notification_list'
-    template_name = 'notifications/notification_list.html'
 
     def get_queryset(self, **kwargs):
         return self.request.user.notifications.unread()

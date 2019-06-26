@@ -19,7 +19,6 @@ from messager.models import Message
 
 class MessagesListView(LoginRequiredMixin, ListView):
     model = Message
-    template_name = "messager/message_list.html"
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(MessagesListView, self).get_context_data()
@@ -71,7 +70,7 @@ def send_message(request):
         channel_layer = get_channel_layer()
         payload = {
             'type': 'receive',
-            'message': render_to_string('messager/single_message.html', {"message": msg}),
+            'message': msg,
             'sender': sender.username
         }
         # group_send(group: 所在组-接收者的username, message: 消息内容)

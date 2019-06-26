@@ -31,7 +31,6 @@ class GenerateTokenView(APIView):
         token_string = req_data.get('token')
         username = req_data.get('username')
         password = req_data.get('password')
-
         if not token_string:
             auth_user = authenticate(username=username, password=password)
         else:
