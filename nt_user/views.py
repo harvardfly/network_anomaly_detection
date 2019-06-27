@@ -16,10 +16,14 @@ from nt_user.serializers import (
     UserRegSerializer, UserDetailSerializer,
     FeedbackMessageSerializer
 )
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 User = get_user_model()
 
 
+# 缓存get请求返回的结果1个小时
+@method_decorator(cache_page(60 * 60), name='get')
 class UserViewset(mixins.CreateModelMixin,
                   mixins.UpdateModelMixin,
                   mixins.RetrieveModelMixin,

@@ -76,3 +76,10 @@ raven senty
 支持自动从django orm映射index  signal自动更新index；
 缺陷是只支持ES 2.x及以下  比较鸡肋，建议还是用DSL或Elasticsearch
 ```
+
+# cache_page缓存接口返回的结果
+```
+缓存get请求返回的结果1个小时
+@method_decorator(cache_page(60 * 60), name='get')
+```
+

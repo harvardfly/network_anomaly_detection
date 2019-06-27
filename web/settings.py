@@ -73,7 +73,10 @@ INSTALLED_APPS = [
     'notifications.apps.NotificationsConfig',
 
     # search
-    'search.apps.SearchConfig'
+    'search.apps.SearchConfig',
+
+    # 异步发送邮件
+    'djcelery_email',
 ]
 
 MIDDLEWARE = [
@@ -142,6 +145,7 @@ DATABASES = {
         "NAME": "",
         "PASSWORD": "",
         "PORT": "",
+        "CONN_MAX_AGE": 300,  # 持久化数据库连接
     },
 }
 
@@ -347,3 +351,28 @@ HAYSTACK_CONNECTIONS = {
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 20  # 分页
 # 实时信号量处理器，模型类中数据增加、更新、删除时自动更新索引
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder'
+]
+# django-compressor 静态文件压缩
+# COMPRESS_ENABLED = env.bool('COMPRESS_ENABLED', default=True)
+# https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_URL
+INSTALLED_APPS += ['compressor']
+COMPRESS_OFFLINE = True
+COMPRESS_ENABLED = True
+COMPRESS_URL = STATIC_URL
+
+# 邮箱配置
+DJANGO_EMAIL_BACKEND = "djcelery_email.backends.CeleryEmailBackend"
+DJANGO_EMAIL_HOST = "smtpdm.aliyun.com"
+DJANGO_EMAIL_USE_SSL = True
+DJANGO_EMAIL_PORT = 465
+DJANGO_EMAIL_HOST_USER = ""
+DJANGO_EMAIL_HOST_PASSWORD = ""
+DJANGO_DEFAULT_FROM_EMAIL = ""
+
+# session 缓存到redis
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'

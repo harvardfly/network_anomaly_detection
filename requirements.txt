@@ -77,3 +77,12 @@ elasticsearch-2.4.1
 
 # 测试用例
 django-test-plus==1.2.1
+
+# compressor静态文件压缩
+django-appconf==1.0.3
+django-compressor==2.3
+rcssmin==1.0.6
+rjsmin==1.1.0
+
+# celery异步发送邮件
+django-celery-email==2.0.2
