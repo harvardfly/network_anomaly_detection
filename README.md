@@ -83,3 +83,8 @@ raven senty
 @method_decorator(cache_page(60 * 60), name='get')
 ```
 
+# 部署方式可采用异步的方式部署，提高并发
+```
+nginx+tornado+daphne+supervisor
+```
+

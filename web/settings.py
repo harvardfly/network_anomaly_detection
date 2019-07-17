@@ -130,9 +130,6 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=TOKEN_EXPIRE_TIME),
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
 }
-# Database
-# https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
 
 DATABASES = {
     "default": {
@@ -145,6 +142,11 @@ DATABASES = {
         "CONN_MAX_AGE": 300,  # 持久化数据库连接
     },
 }
+
+DATABASES['default']['ATOMIC_REQUESTS'] = True  # 将HTTP请求中对数据库的操作封装成事务
+DATABASES['default']['CONN_MAX_AGE'] = 60  # noqa F405 当第一次request请求过来执行sql语句，会连接数据库，但在接下来的60s内如果有新的request过来执行新的sql则无需重新连接数据库，这样减少了连接次数
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -364,7 +366,7 @@ COMPRESS_URL = STATIC_URL
 
 # 邮箱配置
 DJANGO_EMAIL_BACKEND = "djcelery_email.backends.CeleryEmailBackend"
-DJANGO_EMAIL_HOST = "smtpdm.aliyun.com"
+DJANGO_EMAIL_HOST = ""
 DJANGO_EMAIL_USE_SSL = True
 DJANGO_EMAIL_PORT = 465
 DJANGO_EMAIL_HOST_USER = ""
@@ -373,3 +375,24 @@ DJANGO_DEFAULT_FROM_EMAIL = ""
 
 # session 缓存到redis
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
+# # Celery配置
+# CELERY_BROKER_URL="redis://localhost:6379/1"  # 使用Redis 1作为消息代理
+# CELERY_RESULT_BACKEND="redis://localhost:6379/2"  # 把任务结果存在Redis 2
+#
+# INSTALLED_APPS += ['web.celery.CeleryAppConfig']
+# if USE_TZ:
+#     # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-timezone
+#     CELERY_TIMEZONE = TIME_ZONE
+#
+# CELERY_ACCEPT_CONTENT = ['json', 'msgpack']  # 指定接受的内容类型
+# # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-task_serializer
+# CELERY_TASK_SERIALIZER = 'msgpack'  # 任务序列化和反序列化使用msgpack，msgpack是一个二进制的json序列化方案，比json数据结构更小，更快
+# # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_serializer
+# CELERY_RESULT_SERIALIZER = 'json'  # 读取任务结果一般性能要求不高，所以使用了可读性更好的json
+# # http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-time-limit
+# # TODO: set to whatever value is adequate in your circumstances
+# CELERYD_TASK_TIME_LIMIT = 5 * 60  # 单个任务的最大运行时间5分钟
+# # http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-soft-time-limit
+# # TODO: set to whatever value is adequate in your circumstances
+# CELERYD_TASK_SOFT_TIME_LIMIT = 60  # 任务的软时间限制，超时候SoftTimeLimitExceeded异常将会被抛出
