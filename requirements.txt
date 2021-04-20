@@ -49,7 +49,7 @@ asgiref==3.1.2
 asn1crypto==0.24.0
 async-timeout==2.0.1
 attrs==19.1.0
-autobahn==19.6.2
+autobahn==20.12.3
 cffi==1.12.3
 channels==2.2.0
 constantly==15.1.0
