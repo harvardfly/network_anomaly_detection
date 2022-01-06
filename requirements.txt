@@ -13,7 +13,7 @@ pyyaml==3.13
 six==1.11.0
 toml==0.10.0
 virtualenv==16.0.0
-celery==4.2.1
+celery==5.2.2
 certifi==2018.1.18
 chardet==3.0.4
 coreapi==2.3.3
